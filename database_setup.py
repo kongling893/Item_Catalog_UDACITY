@@ -9,18 +9,17 @@ Base = declarative_base()
 
 
 class ToyShop(Base):
-	 __tablename__ = 'toy_shop'
+	__tablename__ = 'toy_shop'
+	id = Column(Integer, primary_key=True)
+	name = Column(String(250), nullable=False)
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
-
-    @property
-    def serialize(self):
-        """Return object data in easily serializeable format"""
-        return {
-            'name': self.name,
-            'id': self.id,
-        }
+	@property
+	def serialize(self):
+		"""Return object data in easily serializeable format"""
+		return {
+			'name': self.name,
+			'id': self.id,
+		}
 
 class ToyItem(Base):
     __tablename__ = 'toy_item'
@@ -30,7 +29,7 @@ class ToyItem(Base):
     description = Column(String(250))
     price = Column(String(8))
     course = Column(String(250))
-    restaurant_id = Column(Integer, ForeignKey('toyshop.id'))
+    restaurant_id = Column(Integer, ForeignKey('toy_shop.id'))
     restaurant = relationship(ToyShop)
 
     @property
