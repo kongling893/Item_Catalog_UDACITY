@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, redirect, jsonify, url_for
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, ToyShop, ToyItem
@@ -16,9 +16,7 @@ session = DBSession()
 @app.route('/')
 @app.route('/index/')
 def index():
-
 	toyshops = session.query(ToyShop).all()
-
 	return render_template("main.html",toyshops = toyshops)
 
 
@@ -27,6 +25,18 @@ def login():
 
     return render_template('login.html')
 
+
+@app.route('/new/', methods=['GET', 'POST'])
+def new():
+	if request.method == 'GET':
+		return render_template('newshop.html')
+	else:
+		newshop = ToyShop(name=request.form['name'],description = request.form['description'])
+		session.add(newshop)
+		#flash('New Toy Shop %s Successfully Created' % newshop.name)
+		session.commit()
+		return redirect(url_for('index'))
+		
 
 
 @app.route('/help/')

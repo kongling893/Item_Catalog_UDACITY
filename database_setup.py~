@@ -18,6 +18,7 @@ class ToyShop(Base):
 		"""Return object data in easily serializeable format"""
 		return {
 			'name': self.name,
+			'description': self.description,
 			'id': self.id,
 		}
 
@@ -29,7 +30,7 @@ class ToyItem(Base):
     description = Column(String(250))
     price = Column(String(8))
     course = Column(String(250))
-    restaurant_id = Column(Integer, ForeignKey('toyshop.id'))
+    restaurant_id = Column(Integer, ForeignKey('toy_shop.id'))
     restaurant = relationship(ToyShop)
 
     @property
