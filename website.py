@@ -1,8 +1,15 @@
 
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, ToyShop, ToyItem
+
+import random, string
+
+from oauth2client.client import AccessTokenRefreshError
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
 
 app = Flask(__name__)
 
@@ -22,8 +29,9 @@ def index():
 
 @app.route('/login/')
 def login():
-
-    return render_template('login.html')
+	state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+	login_session['state'] = state
+	return render_template('login.html',STATE=state)
 
 
 @app.route('/new/', methods=['GET', 'POST'])
@@ -44,5 +52,6 @@ def help():
 	return render_template("help.html")
 
 if __name__ == '__main__':
+	app.secret_key = 'super secret key'
 	app.debug = True
 	app.run(host = '0.0.0.0', port = 5000)

@@ -12,7 +12,7 @@
 
 .jumbotron {
   background-image:url('Toy_Story_title_card.png');
-  height: 1500px;
+  height: 100px;
   background-repeat: no-repeat;
   background-size: cover;
 }

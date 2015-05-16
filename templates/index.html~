@@ -11,29 +11,20 @@
 
   <body>
 	<div class = 'flash'>
-		      {% with messages = get_flashed_messages() %}
-      {% if messages %}
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
 
-        <ul>
-        {% for message in messages %}
-            <li> <strong> {{ message }} </strong> </li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-    {% endwith %}
+        	<ul>
+        	{% for message in messages %}
+            	<li> <strong> {{ message }} </strong> </li>
+        	{% endfor %}
+        	</ul>
+        	{% endif %}
+		{% endwith %}
 
 	</div>
     <div class="jumbotron">
-      <div class="container">
-		<div class="pull-left">
-        	<h1>Find a shop to visit.</h1>
-        	<p>Thousands of toys for your choosing.</p>
-        </div>
-		<ul class="pull-right">
-          <li><a href="/login/">Log In</a></li>
-          <li><a href="/help/"">Help</a></li>
-        </ul>
-      </div>
+      
     </div> 
    {% block content %}
 	{% endblock %}

@@ -1,27 +1,26 @@
-<html>
-
-<head>
+{% extends "index.html" %}
+{% block content %}
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
   </script>
   <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer>
   </script>
-</head>
 
-<body>
 
-<div id="signinButton">
-  <span class="g-signin"
-    data-scope="openid email"
-    data-clientid="1004901313637-dpofru6n7e1p2hedj69i9tamgf04jnoc.apps.googleusercontent.com"
-    data-redirecturi="postmessage"
-    data-accesstype="offline"
-    data-cookiepolicy="single_host_origin"
-    data-callback="signInCallback"
-    data-approvalprompt="force">
-  </span>
-</div>
+<div class = "container">
+	<div id="signinButton">
+  	<span class="g-signin"
+		data-scope="openid email"
+		data-clientid="684578588110-pb22eddi16h5bp0tlvi6j4q43ghlgm50.apps.googleusercontent.com"
+		data-redirecturi="postmessage"
+		data-accesstype="offline"
+		data-cookiepolicy="single_host_origin"
+		data-callback="signInCallback"
+		data-approvalprompt="force">
+  	</span>
+	</div>
 
-<div id="result"></div>
+	<div id="result"></div>
+</div >
 
 
 
@@ -43,7 +42,7 @@ function signInCallback(authResult) {
         if (result) {
           $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
          setTimeout(function() {
-          window.location.href = "/food_truck";
+          window.location.href = "/toyshop";
          }, 2000);
 
       } else if (authResult['error']) {
@@ -55,8 +54,5 @@ function signInCallback(authResult) {
 
   }); } }
 </script>
+{% endblock %}
 
-
-</body>
-
-</html>
