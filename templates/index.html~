@@ -24,7 +24,16 @@
 
 	</div>
     <div class="jumbotron">
-      
+      <div class="container">
+		<div class="pull-left">
+        	<h1>Find a shop to visit.</h1>
+        	<p>Thousands of toys for your choosing.</p>
+        </div>
+		<ul class="pull-right">
+          <li><a href="/login/">Log In</a></li>
+          <li><a href="/help/"">Help</a></li>
+        </ul>
+      </div>
     </div> 
    {% block content %}
 	{% endblock %}
