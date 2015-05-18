@@ -29,10 +29,21 @@
         	<h1>Find a shop to visit.</h1>
         	<p>Thousands of toys for your choosing.</p>
         </div>
-		<ul class="pull-right">
+		{% if credentials is none %}
+			<ul class="pull-right">
           <li><a href="/login/">Log In</a></li>
+		  <li><a href="/gdisconnect">Log Out</a></li>
           <li><a href="/help/"">Help</a></li>
         </ul>
+		{% else %}
+		<div class="pull-right">
+			<p >Welcome, {{login_session['username']}}&nbsp&nbsp<img src= ' {{login_session['picture']}} '  style = "width: 30px; height: 30px;border-radius: 5px;-webkit-border-radius: 15px;-moz-border-radius: 5px;"> </p> 
+		<ul>
+			<li><a href="/gdisconnect">Log Out</a></li>
+			
+		</ul>
+		</div>		
+		{% endif %}
       </div>
     </div> 
    {% block content %}

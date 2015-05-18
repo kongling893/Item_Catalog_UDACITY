@@ -32,16 +32,18 @@ session = DBSession()
 @app.route('/index/')
 def showShops():
 	toyshops = session.query(ToyShop).all()
-	return render_template("main.html",toyshops = toyshops)
+	credentials = login_session.get('credentials')
+	if credentials is not None:
+		return render_template("main.html",toyshops = toyshops, login_session = login_session )
+	else:
+		return render_template("main.html",toyshops = toyshops, credentials = None )
 
 
 @app.route('/login/')
 def login():
 	state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
 	login_session['state'] = state
-	return render_template('login.html',STATE=state)
-
-
+	return render_template('login.html',STATE=state, login_session = login_session)
 
 		
 @app.route('/gconnect', methods=['POST'])
@@ -185,7 +187,7 @@ def gdisconnect():
 def newShop():
 	credentials = login_session.get('credentials')
 	if credentials is None:
-		flash('You must login to create a food truck')
+		flash('You must login to create a toy shop')
 		return redirect(url_for('showShops'))
 	if request.method == 'POST':
 		newShop = ToyShop(name=request.form['name'],description = request.form['description'])
@@ -194,7 +196,7 @@ def newShop():
 		session.commit()
 		return redirect(url_for('showShops'))
 	else:
-		return render_template('newshop.html')
+		return render_template('newshop.html',login_session = login_session)
 
 # User Helper Functions
 def createUser(login_session):
