@@ -4,7 +4,7 @@
         <div class="container">
             <h2>Toy Shop Guides</h2>
             <p>Not sure which shop to visit?</p>
-			<button type="button"><a href = "\new\">New Toy Shop<a></button>
+			<button type="button"><a href = "\new\">New Toy Shop</a></button>
     </div>
     <div class="learn-more">
 	  <div class="container">
@@ -12,8 +12,8 @@
 		  {% for shop in toyshops%}
 	      <div class="col-md-4">
 			<h3>{{shop.name}}</h3>
-			<p>{{shop.description}}.</p>
-			<p><a href="#">See the toys sold in this shop.</a></p>
+			
+			<p><a href="/index/{{shop.id}}">See the toys sold in this shop.</a></p>
 	      </div>
 		 {% endfor %}
 	    </div>

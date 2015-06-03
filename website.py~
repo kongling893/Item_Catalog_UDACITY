@@ -38,6 +38,15 @@ def showShops():
 	else:
 		return render_template("main.html",toyshops = toyshops, credentials = None )
 
+@app.route('/index/<string:shop_ID>')
+def showItems(shop_ID):
+	toyshop = session.query(ToyShop).filter_by(id=shop_ID).one()
+	user_id = toyshop.user_id
+	print user_id
+	user = session.query(User).filter_by(id = user_id).one()
+	toys = [] #session.query(ToyItem).filter_by(shop_id=shop_ID).one()
+	return render_template('toys.html', toys=toys, toyshop=toyshop, user = user, login_session = login_session)
+
 
 @app.route('/login/')
 def login():
@@ -182,17 +191,19 @@ def gdisconnect():
         return response
 
 
-# Create a new restaurant
+# Create a new shop
 @app.route('/new/', methods=['GET', 'POST'])
 def newShop():
 	credentials = login_session.get('credentials')
 	if credentials is None:
-		flash('You must login to create a shop')
+		flash('You must login to create a toy shop')
 		return redirect(url_for('showShops'))
+	
 	if request.method == 'POST':
+		
 		newShop = ToyShop(name=request.form['name'],description = request.form['description'])
 		session.add(newShop)
-		flash('New Restaurant %s Successfully Created' % newRestaurant.name)
+		flash('New Toy shop %s Successfully Created' % newShop.name)
 		session.commit()
 		return redirect(url_for('showShops'))
 	else:
