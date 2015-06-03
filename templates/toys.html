@@ -27,8 +27,22 @@
         </ul>
         {% endif %}
     {% endwith %}
-
-
+</div>
+	<div class="row padding-top padding-bottom">
+		<div class="col-md-1"></div>
+		<div class="col-md-11 padding-none">
+			<a href="{{url_for('editToyshop', shop_ID = toyshop.id )}}">
+				<button class="btn btn-default" id="new-menu-item">Edit Toy Shop</button>
+			</a>
+			<a href="{{url_for('addNewToy', shop_ID = toyshop.id )}}">
+				<button class="btn btn-default" id="new-menu-item">Add New Toy</button>
+			</a>
+			<a href="{{url_for('deleteToyshop', shop_ID = toyshop.id )}}">
+				<button class="btn btn-default delete" id="delete-food_truck">Delete Toy Shop</button>
+			</a>
+		</div>
+		<div class="col-md-7"></div>
+	</div>
 	{% if toys !=[] %}
 		<div class="row">
 			<div class="col-md-1"></div>

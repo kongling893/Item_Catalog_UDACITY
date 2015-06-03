@@ -181,13 +181,15 @@ def gdisconnect():
 
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        flash('Successfully disconnected.')
+        return redirect(url_for('showShops'))
     else:
         # For whatever reason, the given token was invalid.
         response = make_response(json.dumps(
             'Failed to revoke token for given user.'), 400)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        flash('Failed to revoke token for given user.')
+        return redirect(url_for('showShops'))
 
 
 # Create a new shop
@@ -207,6 +209,31 @@ def newShop():
 		return redirect(url_for('showShops'))
 	else:
 		return render_template('newshop.html',login_session = login_session)
+
+# add a new toy to shop
+@app.route('/index/<string:shop_ID>/add', methods=['GET', 'POST'])
+def addNewToy():
+	return "TODO"
+
+# edit a toy shop
+@app.route('/index/<string:shop_ID>/edit', methods=['GET', 'POST'])
+def editToyshop():
+	return "TODO"
+
+# delete a toy shop
+@app.route('/index/<string:shop_ID>/delete/')
+def deleteToyshop(shop_ID):
+	credentials = login_session.get('credentials')
+	login_user_id = getUserID(login_session['email'])
+	ShopToDelete = session.query(ToyShop).filter_by(id=shop_ID).one()
+	if ShopToDelete.user_id != login_user_id:
+        flash("You can only edit your own shop.")
+        return redirect(url_for('showShops'))
+	session.delete(ShopToDelete)
+	session.commit()
+	 flash("You have deleted your shop successfully.")
+	return redirect(url_for('showShops'))
+
 
 # User Helper Functions
 def createUser(login_session):
