@@ -41,8 +41,7 @@ def showShops():
 @app.route('/index/<string:shop_ID>')
 def showItems(shop_ID):
 	toyshop = session.query(ToyShop).filter_by(id=shop_ID).one()
-	user_id = toyshop.name
-	print user_id
+	user_id = toyshop.user_id
 	user = session.query(User).filter_by(id = user_id).one()
 	toys = [] #session.query(ToyItem).filter_by(shop_id=shop_ID).one()
 	return render_template('toys.html', toys=toys, toyshop=toyshop, user = user, login_session = login_session)
@@ -201,7 +200,7 @@ def newShop():
 	
 	if request.method == 'POST':
 		
-		newShop = ToyShop(name=request.form['name'],description = request.form['description'])
+		newShop = ToyShop(name=request.form['name'],description = request.form['description'], user_id = login_session.get('user_id') )
 		session.add(newShop)
 		flash('New Toy shop %s Successfully Created' % newShop.name)
 		session.commit()
