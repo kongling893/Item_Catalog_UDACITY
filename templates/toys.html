@@ -16,29 +16,17 @@
 		</div>
 	</div>
 
-<div class = 'flash'>
-		      {% with messages = get_flashed_messages() %}
-      {% if messages %}
-
-        <ul>
-        {% for message in messages %}
-            <li> <strong> {{ message }} </strong> </li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-    {% endwith %}
-</div>
 	<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
 		<div class="col-md-11 padding-none">
 			<a href="{{url_for('editToyshop', shop_ID = toyshop.id )}}">
-				<button class="btn btn-default" id="new-menu-item">Edit Toy Shop</button>
+				<button class="btn btn-default" id="edit">Edit Toy Shop</button>
 			</a>
 			<a href="{{url_for('addNewToy', shop_ID = toyshop.id )}}">
-				<button class="btn btn-default" id="new-menu-item">Add New Toy</button>
+				<button class="btn btn-default" id="new-toy">Add New Toy</button>
 			</a>
 			<a href="{{url_for('deleteToyshop', shop_ID = toyshop.id )}}">
-				<button class="btn btn-default delete" id="delete-food_truck">Delete Toy Shop</button>
+				<button class="btn btn-default delete" id="delete">Delete Toy Shop</button>
 			</a>
 		</div>
 		<div class="col-md-7"></div>
@@ -51,13 +39,10 @@
 						<div class="menu-item">
 							<h3>{{toy.name}}</h3>
 							<p>{{toy.description}}</p>
-							<p class="menu-price">{{i.price}}</p>
-							<a href='{{url_for('editMenuItem', food_truck_id = food_truck.id, menu_id=i.id ) }}'>Edit</a> |
-							<a href='{{url_for('deleteMenuItem', food_truck_id = food_truck.id, menu_id=i.id ) }}'>Delete</a>
+							<p class="menu-price">{{toy.price}}</p>
+							<a href='{{url_for('deleteToy', shop_ID = shop_ID, toy_ID=toy.id ) }}'>Delete</a>
 						</div>
 				{% endfor %}
-			</div>
-			<div class="col-md-1"></div>
 		</div>
 	{% endif %}
 {% endblock %}

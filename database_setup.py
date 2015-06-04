@@ -50,7 +50,6 @@ class ToyItem(Base):
     id = Column(Integer, primary_key=True)
     description = Column(String(250))
     price = Column(String(8))
-    course = Column(String(250))
     shop_id = Column(Integer, ForeignKey('toy_shop.id'))
     shop = relationship(ToyShop)
     user_id = Column(Integer, ForeignKey('user.id'))

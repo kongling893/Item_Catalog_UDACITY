@@ -38,12 +38,12 @@ def showShops():
 	else:
 		return render_template("main.html",toyshops = toyshops, credentials = None )
 
-@app.route('/index/<string:shop_ID>')
+@app.route('/index/<string:shop_ID>/')
 def showItems(shop_ID):
 	toyshop = session.query(ToyShop).filter_by(id=shop_ID).one()
 	user_id = toyshop.user_id
 	user = session.query(User).filter_by(id = user_id).one()
-	toys = [] #session.query(ToyItem).filter_by(shop_id=shop_ID).one()
+	toys = session.query(ToyItem).filter_by(shop_id=shop_ID).all()
 	return render_template('toys.html', toys=toys, toyshop=toyshop, user = user, login_session = login_session)
 
 
@@ -212,7 +212,27 @@ def newShop():
 
 # add a new toy to shop
 @app.route('/index/<string:shop_ID>/add', methods=['GET', 'POST'])
-def addNewToy():
+def addNewToy(shop_ID):
+	credentials = login_session.get('credentials')
+	if credentials is None:
+		flash('You must login to create a toy shop')
+		return redirect(url_for('showShops'))
+	if request.method == 'POST':
+		newToy = ToyItem(name=request.form['name'],
+						description = request.form['description'], 
+						user_id = login_session.get('user_id'), 
+						price = request.form['price'], 
+						shop_id = shop_ID)
+		session.add(newToy)
+		session.commit()
+		flash('New Toy %s has beenSuccessfully Created' % newToy.name)
+		return redirect(url_for('showItems',shop_ID = shop_ID))
+	else:
+		return render_template('newtoy.html',shop_ID = shop_ID,login_session = login_session)
+
+# delete a toy from shop
+@app.route('/index/<string:shop_ID>/<string:toy_ID>', methods=['GET', 'POST'])
+def deleteToy():
 	return "TODO"
 
 # edit a toy shop
@@ -227,11 +247,11 @@ def deleteToyshop(shop_ID):
 	login_user_id = getUserID(login_session['email'])
 	ShopToDelete = session.query(ToyShop).filter_by(id=shop_ID).one()
 	if ShopToDelete.user_id != login_user_id:
-        flash("You can only edit your own shop.")
-        return redirect(url_for('showShops'))
+		flash("You can only delete your own shop.")
+		return redirect(url_for('showShops'))
 	session.delete(ShopToDelete)
 	session.commit()
-	 flash("You have deleted your shop successfully.")
+	flash("You have deleted your shop successfully.")
 	return redirect(url_for('showShops'))
 
 
