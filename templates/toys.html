@@ -40,7 +40,7 @@
 							<h3>{{toy.name}}</h3>
 							<p>{{toy.description}}</p>
 							<p class="menu-price">{{toy.price}}</p>
-							<a href='{{url_for('deleteToy', shop_ID = shop_ID, toy_ID=toy.id ) }}'>Delete</a>
+							<a href='{{url_for('deleteToy', shop_ID = toyshop.id, toy_ID=toy.id ) }}'>Delete</a>
 						</div>
 				{% endfor %}
 			</div>

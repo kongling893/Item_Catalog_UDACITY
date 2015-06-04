@@ -231,9 +231,18 @@ def addNewToy(shop_ID):
 		return render_template('newtoy.html',shop_ID = shop_ID,login_session = login_session)
 
 # delete a toy from shop
-@app.route('/index/<string:shop_ID>/<string:toy_ID>', methods=['GET', 'POST'])
-def deleteToy():
-	return "TODO"
+@app.route('/index/<string:shop_ID>/<string:toy_ID>/')
+def deleteToy(shop_ID,toy_ID):
+	credentials = login_session.get('credentials')
+	login_user_id = getUserID(login_session['email'])
+	toyToDelete = session.query(ToyItem).filter_by(id=toy_ID).one()
+	if toyToDelete.user_id != login_user_id:
+		flash("You can only manage your own shop.")
+		return redirect(url_for('showItems',shop_ID = shop_ID))
+	session.delete(toyToDelete)
+	session.commit()
+	flash("You have managed your shop successfully.")
+	return redirect(url_for('showItems',shop_ID = shop_ID))
 
 # edit a toy shop
 @app.route('/index/<string:shop_ID>/edit', methods=['GET', 'POST'])
