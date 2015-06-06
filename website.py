@@ -225,7 +225,7 @@ def addNewToy(shop_ID):
 						shop_id = shop_ID)
 		session.add(newToy)
 		session.commit()
-		flash('New Toy %s has beenSuccessfully Created' % newToy.name)
+		flash('New Toy %s has been successfully Created' % newToy.name)
 		return redirect(url_for('showItems',shop_ID = shop_ID))
 	else:
 		return render_template('newtoy.html',shop_ID = shop_ID,login_session = login_session)
@@ -246,8 +246,20 @@ def deleteToy(shop_ID,toy_ID):
 
 # edit a toy shop
 @app.route('/index/<string:shop_ID>/edit', methods=['GET', 'POST'])
-def editToyshop():
-	return "TODO"
+def editToyshop(shop_ID):
+	credentials = login_session.get('credentials')
+	login_user_id = getUserID(login_session['email'])
+	shopToEdit = session.query(ToyShop).filter_by(id=shop_ID).one()
+	if shopToEdit.user_id != login_user_id:
+		flash("You can only manage your own shop.")
+		return redirect(url_for('showItems',shop_ID = shop_ID))
+	if request.method == 'POST':
+		shopToEdit.name = request.form['name']
+		shopToEdit.description = request.form['description']
+		flash('%s has been successfully edited' % shopToEdit.name)
+		return redirect(url_for('showItems',shop_ID = shop_ID))
+	else:
+		return render_template('editShop.html',toyShop = shopToEdit,login_session = login_session)
 
 # delete a toy shop
 @app.route('/index/<string:shop_ID>/delete/')
