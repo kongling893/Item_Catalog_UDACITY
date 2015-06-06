@@ -10,6 +10,12 @@ You can use this website to manage toy shops.
 4. Open browser and navigate to http://localhost:5000/
 
 ##Features
+1. Using Flask ( a light Python web framework).
+2. Using OAuth 2.0 to Access Google APIs.
+	- You can login using your google account.
+	- Only the owner can manage his own shop.
+3. Using RESRFULL APIs, like Post and Get.
+
 
 ##You will see
 The main page looks like:
