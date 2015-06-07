@@ -3,36 +3,59 @@ This is the third project for "Full Stack Web Developer Nanodegree" on Udacity.
 
 You can use this website to manage toy shops.
 
+##Before running this website, make sure the following python modules have been installed:
+	- flask
+	- sqlalchemy
+	- oauth2client
+	- httplib2
+
 ##Instructions
 1. Clone this project to your local machine at first.
 2. Use `python database_setup.py` to create database.
-3. Use `python run.py` to run this website on your local machine.
-4. Open browser and navigate to http://localhost:5000/
+3. Use `python import_fake_data.py` to import fake data if you want to test this website.
+4. Use `python run.py` to run this website on your local machine.
+5. Open browser and navigate to http://localhost:5000/
 
 ##Features
 1. Using Flask ( a light Python web framework).
 2. Using OAuth 2.0 to Access Google APIs.
 	- You can login using your google account.
 	- Only the owner can manage his own shop.
-3. Using RESRFULL APIs, like Post and Get.
+3. Using RESRfull APIs, like Post and Get.
 4. Providing JSON APIs, which you can exploit to get the information you want.
 
+## We also provide json APIs
+
+	@app.route('/index/<string:shop_ID>/JSON/')
+	def shopJSON(shop_ID):
+		shops = session.query(ToyShop).filter_by(id=shop_ID).one()
+		toys = session.query(ToyItem).filter_by(shop_id = shop_ID).all()
+		return jsonify(Shop=shops.serialize, Toys = [g.serialize for g in toys])
+
+
+	@app.route('/index/<string:shop_ID>/<string:toy_ID>/JSON/')
+	def toyJSON(shop_ID,toy_ID):
+		toy = session.query(ToyItem).filter_by(id=toy_ID).one()
+		return jsonify(Toy = toy.serialize)
+
+You can use url likes `localhost:5000/index/<string:shop_ID>/JSON/` to get the JSON file corresponding to the shop with id = shop_ip; 
+You can use url likes `localhost:5000/index/<string:shop_ID>/<string:toy_ID>/JSON/` to get the JSON file corresponding to the toy with id = toy_ID. 
 
 ##You will see
 The main page looks like:
-![1](https://lh6.googleusercontent.com/-W4GDb-HbPAQ/VXLITO3piTI/AAAAAAAAAEo/IavhyJlcUCM/w1212-h682-no/1.png)
+![1](https://lh5.googleusercontent.com/-qkx6LQ6O9wU/VXRf6QC_P1I/AAAAAAAAAG0/tUHsYB8_b4k/w1212-h682/1.png)
 
 You can use your google account to login:
-![2](https://lh6.googleusercontent.com/-WbN7o3RDu-I/VXLIS2whsxI/AAAAAAAAAE8/I_j3AoRVemU/w1212-h682-no/2.png)
+![2](https://lh4.googleusercontent.com/-d3k5mYac8II/VXRf5Rq-5JI/AAAAAAAAAGw/9IwK94wdilU/w1212-h682-no/2.png)
 
 You can create your own shop:
-![4](https://lh4.googleusercontent.com/-kN-G7Y4Mwws/VXLIUe_sqqI/AAAAAAAAAFA/yhcdgKXaEgA/w1212-h682-no/4.png)
+![4](https://lh6.googleusercontent.com/-_vakljjtW2k/VXRf6aDsoeI/AAAAAAAAAHA/YhKeW63N0Lk/w1212-h682-no/3.png)
 
-Then you can see the page like:
-![6](https://lh4.googleusercontent.com/-itZrgoSVe6E/VXLIUqT7klI/AAAAAAAAAFQ/2aAuXp3GUts/w1212-h682-no/6.png)
-
-You view the items in your shop:
-![9](https://lh4.googleusercontent.com/-vAlkmkk7klA/VXLIVqgiHnI/AAAAAAAAAFY/-HIsIM1JV3o/w1212-h682-no/9.png)
+You can view the shop:
+![6](https://lh4.googleusercontent.com/-CtQJuzp_JFM/VXRgB3Um12I/AAAAAAAAAHM/ZF8KbHyBzMw/w1212-h682-no/4.png)
 
 You can add new toy to your shop:
-![7](https://lh4.googleusercontent.com/-tMCdm8zA7Es/VXLIVcGlaLI/AAAAAAAAAFU/wd-NCNb3smM/w1212-h682-no/8.png)
+![7](https://lh6.googleusercontent.com/-iTptXE7dyhk/VXRgHfLVLuI/AAAAAAAAAHY/Vbw9Fa3yCL8/w1212-h682-no/5.png)
+
+You can use JSON APIs like:
+![9](https://lh6.googleusercontent.com/-iSpM6UUs1NE/VXRgCL2RRZI/AAAAAAAAAHQ/m1jXVYBpSnY/w1212-h682-no/6.png)
