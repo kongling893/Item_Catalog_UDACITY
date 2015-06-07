@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import Flask, jsonify,render_template, request, redirect, jsonify, url_for, flash
 from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -117,13 +117,6 @@ def gconnect():
     # Store the access token in the session for later use.
     login_session['provider'] = 'google'
     login_session['credentials'] = credentials
-    '''
-	Dear sir,
-	In your comments, the above code should be changed to 
-    	login_session['credentials'] = credentials.to_json()
-    There is no bug in my computer if using the original one. 
-    Further, if I change the code according to yours, a bug will appear.
-	'''
     login_session['gplus_id'] = gplus_id
     response = make_response(json.dumps('Successfully connected user.', 200))
 
@@ -313,7 +306,20 @@ def deleteToyshop(shop_ID):
 def help():
 	return render_template("help.html")
 
+#json APIs
+@app.route('/index/<string:shop_ID>/JSON/')
+def shopJSON(shop_ID):
+    shops = session.query(ToyShop).filter_by(id=shop_ID).one()
+    toys = session.query(ToyItem).filter_by(shop_id = shop_ID).all()
+    return jsonify(Shop=shops.serialize, Toys = [g.serialize for g in toys])
+
+
+@app.route('/index/<string:shop_ID>/<string:toy_ID>/JSON/')
+def toyJSON(shop_ID,toy_ID):
+    toy = session.query(ToyItem).filter_by(id=toy_ID).one()
+    return jsonify(Toy = toy.serialize)
+
 if __name__ == '__main__':
 	app.secret_key = 'super secret key'
 	app.debug = True
-	app.run(host = '0.0.0.0', port = 5000)
+	app.run(host = 'localhost', port = 5000)

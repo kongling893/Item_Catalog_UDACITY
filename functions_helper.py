@@ -35,7 +35,7 @@ def getUserID(email):
     except:
         return None
 
-def checkLogin(login_session): # check user has logined or not
+def checkLogin(login_session): # check user has loged in or not
 	credentials = login_session.get('credentials')
 	if credentials is None:
 		return False
