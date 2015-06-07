@@ -15,6 +15,7 @@ You can use this website to manage toy shops.
 	- You can login using your google account.
 	- Only the owner can manage his own shop.
 3. Using RESRFULL APIs, like Post and Get.
+4. Providing JSON APIs, which you can exploit to get the information you want.
 
 
 ##You will see
