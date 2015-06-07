@@ -6,11 +6,13 @@
 	<div class="row banner menu">
 		<div class="col-md-11 col-md-offset-1 padding-none">
 			<h1>{{ toyshop.name }}
+			{% if login_session.get('credentials') is not none %}
 			<figure class="creator">
 				<br/>
 				<p style = "font-size: 24px">{{user.name}}&nbsp&nbsp<img src= ' {{login_session['picture']}} ' style = "width: 30px; height: 30px;border-radius: 5px;-webkit-border-radius: 15px;-moz-border-radius: 5px;"></p>
 
 			</figure>
+			{% endif %}
 			</h1>
 
 		</div>
@@ -18,6 +20,7 @@
 
 	<div class="row padding-top padding-bottom">
 		<div class="col-md-1"></div>
+		{% if login_session.get('credentials') is not none %}
 		<div class="col-md-11 padding-none">
 			<a href="{{url_for('editToyshop', shop_ID = toyshop.id )}}">
 				<button class="btn btn-default" id="edit">Edit Toy Shop</button>
@@ -29,6 +32,7 @@
 				<button class="btn btn-default delete" id="delete">Delete Toy Shop</button>
 			</a>
 		</div>
+		{% endif %}
 		<div class="col-md-7"></div>
 	</div>
 	{% if toys !=[] %}
@@ -39,8 +43,12 @@
 						<div class="menu-item">
 							<h3>{{toy.name}}</h3>
 							<p>{{toy.description}}</p>
-							<p class="menu-price">Price:${{toy.price}}</p>
+							<p class="menu-price">Price:{{toy.price}}$</p>
+							{% if login_session.get('credentials') is not none %}
+							<a href='{{url_for('editToy', shop_ID = toyshop.id, toy_ID=toy.id ) }}'>Edit</a>
+							&nbsp
 							<a href='{{url_for('deleteToy', shop_ID = toyshop.id, toy_ID=toy.id ) }}'>Delete</a>
+							{% endif %}
 						</div>
 				{% endfor %}
 			</div>

@@ -4,7 +4,7 @@ from flask import session as login_session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, ToyShop, ToyItem, User
-
+from functions_helper import *
 import random, string
 
 from oauth2client.client import AccessTokenRefreshError
@@ -32,11 +32,8 @@ session = DBSession()
 @app.route('/index/')
 def showShops():
 	toyshops = session.query(ToyShop).all()
-	credentials = login_session.get('credentials')
-	if credentials is not None:
-		return render_template("main.html",toyshops = toyshops, login_session = login_session )
-	else:
-		return render_template("main.html",toyshops = toyshops, credentials = None )
+	return render_template("main.html",toyshops = toyshops, login_session = login_session )
+
 
 @app.route('/index/<string:shop_ID>/')
 def showItems(shop_ID):
@@ -120,6 +117,13 @@ def gconnect():
     # Store the access token in the session for later use.
     login_session['provider'] = 'google'
     login_session['credentials'] = credentials
+    '''
+	Dear sir,
+	In your comments, the above code should be changed to 
+    	login_session['credentials'] = credentials.to_json()
+    There is no bug in my computer if using the original one. 
+    Further, if I change the code according to yours, a bug will appear.
+	'''
     login_session['gplus_id'] = gplus_id
     response = make_response(json.dumps('Successfully connected user.', 200))
 
@@ -159,9 +163,9 @@ def gconnect():
 
 @app.route("/gdisconnect")
 def gdisconnect():
-    # Only disconnect a connected user.
     credentials = login_session.get('credentials')
-    if credentials is None:
+    # Only disconnect a connected user.
+    if not checkLogin(login_session):
         response = make_response(json.dumps(
             'Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
@@ -195,8 +199,7 @@ def gdisconnect():
 # Create a new shop
 @app.route('/new/', methods=['GET', 'POST'])
 def newShop():
-	credentials = login_session.get('credentials')
-	if credentials is None:
+	if not checkLogin(login_session):
 		flash('You must login to create a toy shop')
 		return redirect(url_for('showShops'))
 	
@@ -213,8 +216,7 @@ def newShop():
 # add a new toy to shop
 @app.route('/index/<string:shop_ID>/add', methods=['GET', 'POST'])
 def addNewToy(shop_ID):
-	credentials = login_session.get('credentials')
-	if credentials is None:
+	if not checkLogin(login_session):
 		flash('You must login to create a toy shop')
 		return redirect(url_for('showShops'))
 	if request.method == 'POST':
@@ -231,9 +233,11 @@ def addNewToy(shop_ID):
 		return render_template('newtoy.html',shop_ID = shop_ID,login_session = login_session)
 
 # delete a toy from shop
-@app.route('/index/<string:shop_ID>/<string:toy_ID>/')
+@app.route('/index/<string:shop_ID>/<string:toy_ID>/delete')
 def deleteToy(shop_ID,toy_ID):
-	credentials = login_session.get('credentials')
+	if not checkLogin(login_session):
+		flash('You must login to manage a toy shop.')
+		return redirect(url_for('showItems',shop_ID = shop_ID))
 	login_user_id = getUserID(login_session['email'])
 	toyToDelete = session.query(ToyItem).filter_by(id=toy_ID).one()
 	if toyToDelete.user_id != login_user_id:
@@ -244,10 +248,37 @@ def deleteToy(shop_ID,toy_ID):
 	flash("You have managed your shop successfully.")
 	return redirect(url_for('showItems',shop_ID = shop_ID))
 
+# edit a toy
+@app.route('/index/<string:shop_ID>/<string:toy_ID>/edit', methods=['GET', 'POST'])
+def editToy(shop_ID,toy_ID):
+	if not checkLogin(login_session):
+		flash('You must login to manage a toy shop.')
+		return redirect(url_for('showItems',shop_ID = shop_ID))
+	login_user_id = getUserID(login_session['email'])
+	toyToEdite = session.query(ToyItem).filter_by(id=toy_ID).one()
+	if toyToEdite.user_id != login_user_id:
+		flash("You can only manage your own shop.")
+		return redirect(url_for('showItems',shop_ID = shop_ID))
+	if request.method == 'POST':
+		toyToEdite.name = request.form['name']
+		toyToEdite.description = request.form['description']
+		toyToEdite.price = request.form['price']
+		flash('%s has been successfully edited' % toyToEdite.name)
+		return redirect(url_for('showItems',shop_ID = shop_ID))
+	else:
+		return render_template('editToy.html',toy = toyToEdite,login_session = login_session)
+
+	session.delete(toyToEdite)
+	session.commit()
+	flash("You have managed your shop successfully.")
+	return redirect(url_for('showItems',shop_ID = shop_ID))
+
 # edit a toy shop
 @app.route('/index/<string:shop_ID>/edit', methods=['GET', 'POST'])
 def editToyshop(shop_ID):
-	credentials = login_session.get('credentials')
+	if not checkLogin(login_session):
+		flash('You must login to manage a toy shop.')
+		return redirect(url_for('showItems',shop_ID = shop_ID))
 	login_user_id = getUserID(login_session['email'])
 	shopToEdit = session.query(ToyShop).filter_by(id=shop_ID).one()
 	if shopToEdit.user_id != login_user_id:
@@ -264,7 +295,9 @@ def editToyshop(shop_ID):
 # delete a toy shop
 @app.route('/index/<string:shop_ID>/delete/')
 def deleteToyshop(shop_ID):
-	credentials = login_session.get('credentials')
+	if not checkLogin(login_session):
+		flash('You must login to manage a toy shop.')
+		return redirect(url_for('showItems',shop_ID = shop_ID))
 	login_user_id = getUserID(login_session['email'])
 	ShopToDelete = session.query(ToyShop).filter_by(id=shop_ID).one()
 	if ShopToDelete.user_id != login_user_id:
@@ -276,27 +309,6 @@ def deleteToyshop(shop_ID):
 	return redirect(url_for('showShops'))
 
 
-# User Helper Functions
-def createUser(login_session):
-    newUser = User(name=login_session['username'], email=login_session[
-                   'email'], picture=login_session['picture'])
-    session.add(newUser)
-    session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
-    return user.id
-
-
-def getUserInfo(user_id):
-    user = session.query(User).filter_by(id=user_id).one()
-    return user
-
-
-def getUserID(email):
-    try:
-        user = session.query(User).filter_by(email=email).one()
-        return user.id
-    except:
-        return None
 @app.route('/help/')
 def help():
 	return render_template("help.html")

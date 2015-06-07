@@ -30,10 +30,9 @@
         	<p>Thousands of toys for your choosing.</p>
 			<a href = "/">Home Page</a>
         </div>
-		{% if credentials is none %}
+		{% if login_session.get('credentials') is none %}
 			<ul class="pull-right">
           <li><a href="/login/">Log In</a></li>
-		  <li><a href="/gdisconnect">Log Out</a></li>
           <li><a href="/help/"">Help</a></li>
         </ul>
 		{% else %}
