@@ -48,7 +48,14 @@
     </div> 
    {% block content %}
 	{% endblock %}
-	
+		<script>
+		function myFunction(message, url) {
+			var r = confirm(message);
+			if (r == true) {
+				window.location.replace(url);
+			}
+		}
+	</script>
   </body>
 {% include "footer.html" %}
 </html>

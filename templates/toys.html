@@ -28,9 +28,7 @@
 			<a href="{{url_for('addNewToy', shop_ID = toyshop.id )}}">
 				<button class="btn btn-default" id="new-toy">Add New Toy</button>
 			</a>
-			<a href="{{url_for('deleteToyshop', shop_ID = toyshop.id )}}">
-				<button class="btn btn-default delete" id="delete">Delete Toy Shop</button>
-			</a>
+				<button class="btn btn-default delete" id="delete" onclick="myFunction('Are you sure to delete this toy shop?','{{url_for('deleteToyshop', shop_ID = toyshop.id )}}')" >Delete Toy Shop</button>
 		</div>
 		{% endif %}
 		<div class="col-md-7"></div>
@@ -45,13 +43,14 @@
 							<p>{{toy.description}}</p>
 							<p class="menu-price">Price:{{toy.price}}$</p>
 							{% if login_session.get('credentials') is not none %}
-							<a href='{{url_for('editToy', shop_ID = toyshop.id, toy_ID=toy.id ) }}'>Edit</a>
+							<button  onclick="window.location.replace('{{url_for('editToy', shop_ID = toyshop.id, toy_ID=toy.id ) }}')">Edit</button>
 							&nbsp
-							<a href='{{url_for('deleteToy', shop_ID = toyshop.id, toy_ID=toy.id ) }}'>Delete</a>
+							<button  onclick="myFunction('Are you sure to delete this toy?','{{url_for('deleteToy', shop_ID = toyshop.id, toy_ID=toy.id ) }}')">Delete</button>
 							{% endif %}
 						</div>
 				{% endfor %}
 			</div>
 		</div>
+
 	{% endif %}
 {% endblock %}
