@@ -4,7 +4,9 @@
         <div class="container">
             <h2>Toy Shop Guides</h2>
             <p>Not sure which shop to visit?</p>
+			{% if login_session.get('credentials') is not none %}
 			<button type="button"><a href = "\new\">New Toy Shop</a></button>
+			{% endif %}
     </div>
     <div class="learn-more">
 	  <div class="container">
