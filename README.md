@@ -3,18 +3,16 @@ This is the third project for "Full Stack Web Developer Nanodegree" on Udacity.
 
 You can use this website to manage toy shops.
 
-##Before running this website, make sure the following python modules have been installed:
-	- flask
-	- sqlalchemy
-	- oauth2client
-	- httplib2
+##Before running this website, make sure all the required python modules have been installed.
+Please see Instructions.
 
 ##Instructions
 1. Clone this project to your local machine at first.
-2. Use `python database_setup.py` to create database.
-3. Use `python import_fake_data.py` to import fake data if you want to test this website.
-4. Use `python run.py` to run this website on your local machine.
-5. Open browser and navigate to http://localhost:5000/
+2. use `pip install -r requirements.txt` to install neccessary python modules.
+3. Use `python database_setup.py` to create database.
+4. Use `python import_fake_data.py` to import fake data if you want to test this website.
+5. Use `python website.py` to run this website on your local machine.
+6. Open browser and navigate to http://localhost:5000/
 
 ##Features
 1. Using Flask ( a light Python web framework).

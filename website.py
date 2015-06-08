@@ -79,16 +79,9 @@ def gconnect():
         return response
 
     # Check that the access token is valid.
-	'''
-	to_json(self) 
-	Creating a JSON representation of an instance of Credentials.
-
-	Returns:
-	   string, a JSON representation of this instance, suitable to pass to
-	'''
-    credentials = credentials.to_json()             #After using to_json, we get a string.
-    credentials = json.loads(credentials)           # Get the corresponding dictionary.
-    access_token = credentials['token_response']['access_token']     #
+    credentials = credentials.to_json()            
+    credentials = json.loads(credentials)         
+    access_token = credentials['token_response']['access_token']     
     url = (
         'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
         % access_token)
