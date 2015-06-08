@@ -262,11 +262,6 @@ def editToy(shop_ID,toy_ID):
 	else:
 		return render_template('editToy.html',toy = toyToEdite,login_session = login_session)
 
-	session.delete(toyToEdite)
-	session.commit()
-	flash("You have managed your shop successfully.")
-	return redirect(url_for('showItems',shop_ID = shop_ID))
-
 # edit a toy shop
 @app.route('/index/<string:shop_ID>/edit', methods=['GET', 'POST'])
 def editToyshop(shop_ID):
