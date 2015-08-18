@@ -66,7 +66,6 @@ class ToyItem(Base):
         }
 
 
-engine = create_engine('sqlite:///toyshop.db')
-
+engine = create_engine('postgresql://catalog:catalog123@localhost/catalog')
 
 Base.metadata.create_all(engine)

@@ -15,13 +15,12 @@ import json
 from flask import make_response
 import requests
 
-
+import os
 
 app = Flask(__name__)
+CLIENT_ID = json.loads(open(os.path.dirname(__file__)+'/client_secrets.json', 'r').read())['web']['client_id']
 
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
-
-engine = create_engine('sqlite:///toyshop.db')
+engine = create_engine('postgresql://catalog:catalog123@localhost/catalog')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
