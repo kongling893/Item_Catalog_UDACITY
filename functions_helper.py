@@ -6,7 +6,8 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, ToyShop, ToyItem, User
 
 
-engine = create_engine('sqlite:///toyshop.db')
+engine = create_engine('postgresql://catalog:catalog123@localhost/catalog')
+
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
