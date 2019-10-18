@@ -1,5 +1,5 @@
 Cheetah==2.4.4
-Flask==0.9
+Flask==1.0
 Jinja2==2.6
 Landscape-Client==14.12
 PAM==0.4.2
