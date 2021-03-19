@@ -1,6 +1,6 @@
 Cheetah==2.4.4
 Flask==0.9
-Jinja2==2.6
+Jinja2==2.11.3
 Landscape-Client==14.12
 PAM==0.4.2
 PyYAML==3.10
