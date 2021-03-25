@@ -3,7 +3,7 @@ Flask==0.9
 Jinja2==2.6
 Landscape-Client==14.12
 PAM==0.4.2
-PyYAML==3.10
+PyYAML==5.4
 SQLAlchemy==0.7.4
 Twisted-Core==13.2.0
 Twisted-Names==13.2.0
